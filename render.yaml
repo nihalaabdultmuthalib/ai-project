@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: ai-qa-service
+    env: docker
+    plan: starter
+    healthCheckPath: /
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_CHAT_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: RETRIEVAL_LIMIT
+        value: "5"
+
