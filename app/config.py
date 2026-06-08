@@ -22,6 +22,7 @@ class Settings:
     environment: str = "development"
     use_local_ai: bool = False
     openai_api_key: str | None = None
+    gemini_api_key: str | None = None
     openai_chat_model: str = "gpt-4o-mini"
     openai_embedding_model: str = "text-embedding-3-small"
     embedding_dimensions: int = 1536
@@ -32,14 +33,24 @@ class Settings:
 @lru_cache
 def get_settings() -> Settings:
     _load_dotenv()
+    
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    
+    # Defaults adjust dynamically based on if Gemini is used
+    default_chat = "gemini-2.5-flash" if gemini_api_key else "gpt-4o-mini"
+    default_embed = "text-embedding-004" if gemini_api_key else "text-embedding-3-small"
+    default_dim = 768 if gemini_api_key else 1536
+    
     return Settings(
         app_name=os.getenv("APP_NAME", "AI QA Service"),
         environment=os.getenv("ENVIRONMENT", "development"),
         use_local_ai=os.getenv("USE_LOCAL_AI", "false").lower() in {"1", "true", "yes", "on"},
-        openai_api_key=os.getenv("OPENAI_API_KEY"),
-        openai_chat_model=os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini"),
-        openai_embedding_model=os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small"),
-        embedding_dimensions=int(os.getenv("EMBEDDING_DIMENSIONS", "1536")),
+        openai_api_key=openai_api_key,
+        gemini_api_key=gemini_api_key,
+        openai_chat_model=os.getenv("OPENAI_CHAT_MODEL", default_chat),
+        openai_embedding_model=os.getenv("OPENAI_EMBEDDING_MODEL", default_embed),
+        embedding_dimensions=int(os.getenv("EMBEDDING_DIMENSIONS", str(default_dim))),
         database_url=os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/ai_qa"),
         retrieval_limit=int(os.getenv("RETRIEVAL_LIMIT", "5")),
     )

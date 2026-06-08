@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS document_chunks (
     id SERIAL PRIMARY KEY,
     source TEXT NOT NULL,
     content TEXT NOT NULL,
-    embedding vector(1536) NOT NULL,
+    embedding vector(768) NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

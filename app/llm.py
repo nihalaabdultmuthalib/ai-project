@@ -49,10 +49,18 @@ class LocalLLMClient:
 
 class LLMClient:
     def __init__(self, settings: Settings):
-        if not settings.openai_api_key:
-            raise LLMError("OPENAI_API_KEY is not configured.")
+        if not settings.openai_api_key and not settings.gemini_api_key:
+            raise LLMError("Neither OPENAI_API_KEY nor GEMINI_API_KEY is configured.")
+        
         self.settings = settings
-        self.client = AsyncOpenAI(api_key=settings.openai_api_key)
+        
+        if settings.gemini_api_key:
+            self.client = AsyncOpenAI(
+                api_key=settings.gemini_api_key,
+                base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+            )
+        else:
+            self.client = AsyncOpenAI(api_key=settings.openai_api_key)
 
     async def embed(self, text: str) -> list[float]:
         try:
