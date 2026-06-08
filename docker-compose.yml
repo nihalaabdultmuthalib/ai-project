@@ -17,6 +17,7 @@ services:
       - db
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
       USE_LOCAL_AI: ${USE_LOCAL_AI:-false}
       DATABASE_URL: postgresql://postgres:postgres@db:5432/ai_qa
     ports:

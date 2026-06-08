@@ -64,10 +64,14 @@ class LLMClient:
 
     async def embed(self, text: str) -> list[float]:
         try:
-            response = await self.client.embeddings.create(
-                model=self.settings.openai_embedding_model,
-                input=text,
-            )
+            # Pass dimensions to truncate Gemini embeddings (supports Matryoshka truncation)
+            kwargs: dict = {
+                "model": self.settings.openai_embedding_model,
+                "input": text,
+            }
+            if self.settings.gemini_api_key:
+                kwargs["dimensions"] = self.settings.embedding_dimensions
+            response = await self.client.embeddings.create(**kwargs)
         except OpenAIError as exc:
             raise LLMError("Embedding request failed.") from exc
 

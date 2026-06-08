@@ -8,8 +8,6 @@ CREATE TABLE IF NOT EXISTS document_chunks (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS document_chunks_embedding_idx
-    ON document_chunks
-    USING ivfflat (embedding vector_cosine_ops)
-    WITH (lists = 100);
+-- Note: pgvector indexes require <= 2000 dimensions.
+-- Using sequential scan for cosine similarity (fine for small datasets).
 

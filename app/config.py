@@ -39,7 +39,7 @@ def get_settings() -> Settings:
     
     # Defaults adjust dynamically based on if Gemini is used
     default_chat = "gemini-2.5-flash" if gemini_api_key else "gpt-4o-mini"
-    default_embed = "text-embedding-004" if gemini_api_key else "text-embedding-3-small"
+    default_embed = "gemini-embedding-001" if gemini_api_key else "text-embedding-3-small"
     default_dim = 768 if gemini_api_key else 1536
     
     return Settings(
