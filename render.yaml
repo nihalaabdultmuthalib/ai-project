@@ -3,16 +3,19 @@ services:
     name: ai-qa-service
     env: docker
     plan: starter
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
-      - key: OPENAI_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
       - key: DATABASE_URL
         sync: false
       - key: OPENAI_CHAT_MODEL
-        value: gpt-4o-mini
+        value: gemini-2.5-flash
       - key: OPENAI_EMBEDDING_MODEL
-        value: text-embedding-3-small
+        value: gemini-embedding-001
+      - key: EMBEDDING_DIMENSIONS
+        value: "768"
       - key: RETRIEVAL_LIMIT
         value: "5"
-
+      - key: USE_LOCAL_AI
+        value: "false"
